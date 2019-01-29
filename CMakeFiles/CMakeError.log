@@ -1,0 +1,57 @@
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/russell/code/arm/smartrain2/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_49cd7/fast"
+/usr/bin/make -f CMakeFiles/cmTC_49cd7.dir/build.make CMakeFiles/cmTC_49cd7.dir/build
+make[1]: Entering directory '/home/russell/code/arm/smartrain2/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_49cd7.dir/CheckSymbolExists.c.o
+/home/russell/code/arm/raspi/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc   -Wall -std=c++11 -o CMakeFiles/cmTC_49cd7.dir/CheckSymbolExists.c.o   -c /home/russell/code/arm/smartrain2/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+cc1: warning: command line option '-std=c++11' is valid for C++/ObjC++ but not for C
+Linking C executable cmTC_49cd7
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_49cd7.dir/link.txt --verbose=1
+/home/russell/code/arm/raspi/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc      -rdynamic CMakeFiles/cmTC_49cd7.dir/CheckSymbolExists.c.o  -o cmTC_49cd7 
+CMakeFiles/cmTC_49cd7.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x38): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_49cd7.dir/build.make:97: recipe for target 'cmTC_49cd7' failed
+make[1]: *** [cmTC_49cd7] Error 1
+make[1]: Leaving directory '/home/russell/code/arm/smartrain2/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_49cd7/fast' failed
+make: *** [cmTC_49cd7/fast] Error 2
+
+File /home/russell/code/arm/smartrain2/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/russell/code/arm/smartrain2/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_897e5/fast"
+/usr/bin/make -f CMakeFiles/cmTC_897e5.dir/build.make CMakeFiles/cmTC_897e5.dir/build
+make[1]: Entering directory '/home/russell/code/arm/smartrain2/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_897e5.dir/CheckFunctionExists.c.o
+/home/russell/code/arm/raspi/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc   -DCHECK_FUNCTION_EXISTS=pthread_create   -Wall -std=c++11 -o CMakeFiles/cmTC_897e5.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+cc1: warning: command line option '-std=c++11' is valid for C++/ObjC++ but not for C
+Linking C executable cmTC_897e5
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_897e5.dir/link.txt --verbose=1
+/home/russell/code/arm/raspi/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_897e5.dir/CheckFunctionExists.c.o  -o cmTC_897e5 -lpthreads 
+/home/russell/code/arm/raspi/tools/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf/bin/../lib/gcc/arm-linux-gnueabihf/4.9.3/../../../../arm-linux-gnueabihf/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_897e5.dir/build.make:97: recipe for target 'cmTC_897e5' failed
+make[1]: *** [cmTC_897e5] Error 1
+make[1]: Leaving directory '/home/russell/code/arm/smartrain2/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_897e5/fast' failed
+make: *** [cmTC_897e5/fast] Error 2
+
+

@@ -1,0 +1,87 @@
+<html>
+<title>SmartRain</title>
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"/>
+<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w"
+    crossorigin="anonymous">
+<form class="pure-form pure-form-stacked" action="process_form" method="GET">
+    <table width="300px" class="pure-table pure-table-bordered" style="text-align: center">
+        <thread">
+            <th>Station</th>
+            <th>Duration</th>
+            <th>Status</th>
+            </thread>
+            <tbody>
+                <tr>
+                    <td style="font: size 11pt">1</td>
+                    <td align="center">
+                        <input name="duration1" value="[dur1]" type="number" style="width: 80px;"></input>
+                    </td>
+                    <td>[stat1]</td>
+                </tr>
+
+                <tr>
+                    <td style="font-size:11pt">2</td>
+                    <td align="center">
+                        <input name="duration2" value="[dur2]" type="number" style="width: 80px;"></input>
+                    </td>
+                    <td>[stat2]</td>
+                </tr>
+
+                <tr>
+                    <td style="font-size: 11pt">3</td>
+                    <td align="center">
+                        <input name="duration3" value="[dur3]" type="number" style="width: 80px"></input>
+                    </td>
+                    <td>[stat3]</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 11pt">4</td>
+                    <td align="center">
+                        <input name="duration4" value="[dur4]" type="number" style="width: 80px"></input>
+                    </td>
+                    <td>[stat4]</td>
+                </tr>
+            </tbody>
+    </table>
+    <br>
+    <table width="300px" class="pure-table pure-table-bordered" style="text-align: center;">
+        <tbody>
+            <tr>
+                <td>Start Time (HH:MM)</td>
+                <td align="center">
+                    <input name="startTime" value="[strTime]" style="width: 110px"></input>
+                </td>
+            </tr>
+            <tr>
+                <td>Disable All</td>
+                <td><input name="disableAll" [disAll] type="checkbox" style="width: 80px"></input></td>
+            </tr>
+            <tr>
+                <td>Weather</td>
+                <td name="weather">[weather]</td>
+            </tr>
+
+            <tr>
+                <td>Temp</td>
+                <td name="temp">[temp]</td>
+            </tr>
+
+            <tr>
+                <td>Humidity</td>
+                <td name="humidity">[humd]</td>
+            </tr>
+
+            <tr>
+                <td>Wind</td>
+                <td name="wind">[wind]</td>
+            </tr>
+            <tr>
+                <td>Days without rain</td>
+                <td name="lastRain">[rain]</td>
+            </tr>
+        </tbody>
+    </table>
+    <input type="submit" id="update" value="Update Settings" style="margin-top: 10px;">
+</form>
+
+</html>
