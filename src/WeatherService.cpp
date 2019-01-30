@@ -32,7 +32,7 @@ WeatherData WeatherService::GetData()
   { 
     auto const host("api.openweathermap.org");
     auto const port("80");
-    auto const body("/data/2.5/weather?zip=92399,us&APPID=e7d28320794a5994c8e10181cee49918");
+    auto const body("/data/2.5/weather?<client details>");
 
     boost::asio::io_context ioc;
     tcp::resolver resolver{ioc};
