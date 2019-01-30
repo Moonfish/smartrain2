@@ -1,4 +1,4 @@
-# smartrain2
+# SmartRain2
 This is the second version of a simple homebrew sprinkler control system.
 The implementation is entirely in C++ with the only dependency on asio::boost (header only) for the webserver.
 The application is intended to run on a raspberrypi or beaglebone running linux.
