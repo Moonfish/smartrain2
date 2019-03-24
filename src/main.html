@@ -2,9 +2,9 @@
 <title>SmartRain</title>
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"/>
 <body>
-<font face="Verdana" size="4">
+<font face="Courier" size="14pt">
 <form action="process_form" method="GET">
-    <table width="300px" class="pure-table pure-table-bordered" style="text-align: center">
+    <table width="300px" style="text-align: center">
         <thread">
             <th>Station</th>
             <th>Duration</th>
@@ -12,7 +12,7 @@
             </thread>
             <tbody>
                 <tr>
-                    <td style="font: size 11pt">1</td>
+                    <td style="font-size: 14pt">1</td>
                     <td align="center">
                         <input name="duration1" value="[dur1]" min="0" max="30" type="number" style="width: 80px;"></input>
                     </td>
@@ -20,7 +20,7 @@
                 </tr>
 
                 <tr>
-                    <td style="font-size:11pt">2</td>
+                    <td style="font-size:14pt">2</td>
                     <td align="center">
                         <input name="duration2" value="[dur2]" min="0" max="30" type="number" style="width: 80px;"></input>
                     </td>
@@ -28,14 +28,14 @@
                 </tr>
 
                 <tr>
-                    <td style="font-size: 11pt">3</td>
+                    <td style="font-size:14pt">3</td>
                     <td align="center">
                         <input name="duration3" value="[dur3]" min="0" max="30" type="number" style="width: 80px"></input>
                     </td>
                     <td>[stat3]</td>
                 </tr>
                 <tr>
-                    <td style="font-size: 11pt">4</td>
+                    <td style="font-size:14pt">4</td>
                     <td align="center">
                         <input name="duration4" value="[dur4]" min="0" max="30" type="number" style="width: 80px"></input>
                     </td>
@@ -44,10 +44,10 @@
             </tbody>
     </table>
     <br>
-    <table width="300px" style="text-align: center;">
+    <table width="300px" style="text-align: center;font-size:14">
         <tbody>
             <tr>
-                <td>Start Time (HH:MM)</td>
+                <td>Start (HH:MM)</td>
                 <td align="center">
                     <input name="startTime" value="[strTime]" pattern="[0-9]{2}:[0-9]{2}" style="width: 110px"></input>
                 </td>
@@ -76,11 +76,29 @@
                 <td name="wind">[wind]</td>
             </tr>
             <tr>
-                <td>Days without rain</td>
+                <td>Days w/o rain</td>
                 <td name="lastRain">[rain]</td>
             </tr>
         </tbody>
     </table>
+    <br>
+    <div Style="font-size: 8pt">
+        <l1>Manual Override:</l1><br>
+        <input type="radio" name="manualOverride" [m-off] value="moff">
+        <label for="contactChoice1">Off</label>
+    
+        <input type="radio" name="manualOverride" [man-1] value="man1">
+        <label>1</label>
+    
+        <input type="radio" name="manualOverride" [man-2] value="man2">
+        <label>2</label>
+
+        <input type="radio" name="manualOverride" [man-3] value="man3">
+        <label>3</label>
+
+        <input type="radio" name="manualOverride" [man-4] value="man4">
+        <label>4</label>
+      </div>
     <input type="submit" id="update" value="Update Settings" style="margin-top: 10px;">
     <input type="button" id="refresh" value="Refresh" onClick="refresh" style="margin-top: 10px;">
 </form>

@@ -118,10 +118,11 @@ private:
   RelayController   m_relay;
 
   std::atomic_bool  m_shutdown;
-  std::atomic_bool  m_manualMode;
 
   std::mutex              m_mux;
   std::condition_variable m_cvWake;
+  
+  int m_manualRunStation;
 };
 
 #endif /* SMARTRAIN_H_ */

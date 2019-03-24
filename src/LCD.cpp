@@ -32,6 +32,15 @@ LCDPanel::LCDPanel(const char* device, int i2cAddress) : m_fd(0)
     throw std::system_error();
   }
 
+  Reset();
+
+  Clear();
+
+  std::cout << "LCD initialized\n";
+}
+
+void LCDPanel::Reset()
+{
   // Reset sequence
   usleep(1000);
   WriteLowerNib(0x03);
@@ -47,10 +56,6 @@ LCDPanel::LCDPanel(const char* device, int i2cAddress) : m_fd(0)
   WriteByte(0x20|0x08);
   // Display on
   WriteByte(0x04|0x08);
-
-  Clear();
-
-  std::cout << "LCD initialized\n";
 }
 
 LCDPanel::~LCDPanel()

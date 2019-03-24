@@ -40,8 +40,7 @@ int main(int argc, const char* argv[])
 
 SmartRain::SmartRain() : m_log("log.html"), 
   m_lcd("/dev/i2c-1", 0x27), 
-  m_relay(stationCount, "/dev/i2c-1", 0x20),
-  m_manualMode(false)
+  m_relay(stationCount, "/dev/i2c-1", 0x20), m_manualRunStation(-1)
 {
   m_shutdown = false;
   m_runningStation = -1;
@@ -166,6 +165,7 @@ void SmartRain::StartStation(int station, int forMinutes)
   }
 
   m_relay.RelayOn(station);
+  m_lcd.Reset();
 }
 
 bool SmartRain::IsStationOn(int station)
@@ -177,6 +177,7 @@ void SmartRain::StopAllStations()
 {
   m_runningStation = -1;
   m_relay.RelaysOff();
+  m_lcd.Reset();
 }
 
 std::string SmartRain::GetFormatedTime()
@@ -235,9 +236,13 @@ std::string SmartRain::GetStatusLine(int line)
       {
         strm << "Sta: " << m_runningStation+1 << "    Time: ";
 
-        auto remaining = m_stopTime - now;
-
-        strm << std::chrono::duration_cast<std::chrono::minutes>(remaining).count() + 1;
+        if (m_manualRunStation == -1)
+        {
+          auto remaining = m_stopTime - now;
+          strm << std::chrono::duration_cast<std::chrono::minutes>(remaining).count() + 1;
+        }
+        else
+          strm << "?";
       }
     }
     break;
@@ -298,9 +303,6 @@ void SmartRain::UpdateWeatherInfo()
 
 bool SmartRain::AbortRun(std::string& reason)
 {
-  if (m_manualMode)
-    return false;
-
   if (!m_settings.getEnabled())
   {
     reason = "Sprinkler run aborted, system disabled.";
@@ -364,7 +366,7 @@ void SmartRain::ProcessSchedule()
   std::string reason;
 
   // Turn on sprinkler if necessary
-  if (currentTime >= sta0_start && currentTime < sta1_start)
+  if (m_manualRunStation == 0 || (currentTime >= sta0_start && currentTime < sta1_start))
   {
     if (!IsStationOn(0))
     {
@@ -383,7 +385,7 @@ void SmartRain::ProcessSchedule()
       StartStation(0, remainingMin);
     }
   }
-  else if (currentTime >= sta1_start && currentTime < sta2_start)
+  else if (m_manualRunStation == 1 || (currentTime >= sta1_start && currentTime < sta2_start))
   {
     if (!IsStationOn(1))
     {
@@ -402,7 +404,7 @@ void SmartRain::ProcessSchedule()
       StartStation(1, remainingMin);
     }
   }
-  else if (currentTime >= sta2_start && currentTime < sta3_start)
+  else if (m_manualRunStation == 2 || (currentTime >= sta2_start && currentTime < sta3_start))
   {
     if (!IsStationOn(2))
     {
@@ -421,7 +423,7 @@ void SmartRain::ProcessSchedule()
       StartStation(2, remainingMin);
     }
   }
-  else if (currentTime >= sta3_start && currentTime < stop)
+  else if (m_manualRunStation == 3 || (currentTime >= sta3_start && currentTime < stop))
   {
     if (!IsStationOn(3))
     {
@@ -439,11 +441,6 @@ void SmartRain::ProcessSchedule()
       std::cout << "Running station 3\n";
       StartStation(3, remainingMin);
     }
-  }
-  else
-  {
-    if (!m_manualMode)
-      StopAllStations(); // Stop all
   }
 }
 
@@ -480,7 +477,14 @@ std::string SmartRain::LoadWebPage()
 
   // Enabled disabled
   result.replace(result.find("[disAll]"), 8, m_settings.getEnabled() ? "" : "checked");
-  
+
+  // Update manual override checks
+  result.replace(result.find("[m-off]"), 7, m_manualRunStation == -1 ? "checked" : "");
+  result.replace(result.find("[man-1]"), 7, m_manualRunStation == 0 ? "checked" : "");
+  result.replace(result.find("[man-2]"), 7, m_manualRunStation == 1 ? "checked" : "");
+  result.replace(result.find("[man-3]"), 7, m_manualRunStation == 2 ? "checked" : "");
+  result.replace(result.find("[man-4]"), 7, m_manualRunStation == 3 ? "checked" : "");
+    
   // Weather
   result.replace(result.find("[weather]"), 9, m_weather.status);
   result.replace(result.find("[temp]"), 6, std::to_string((int)util::FahrenheitFromKelvin(m_weather.temperature)));
@@ -565,6 +569,38 @@ void SmartRain::ProcessForm(const std::string& args)
 
   m_settings.setEnabled(enabled);
 
+  value = util::ParseRequest(args, "manualOverride");
+  if (!value.empty())
+  {
+    int oldManualStation = m_manualRunStation;
+
+    if (value == "man1")
+    {
+      m_manualRunStation = 0;
+    }
+    else if (value == "man2")
+    {
+      m_manualRunStation = 1;
+    }
+    else if (value == "man3")
+    {
+      m_manualRunStation = 2;
+    }
+    else if (value == "man4")
+    {
+      m_manualRunStation = 3;
+    }
+    else
+    {
+      m_manualRunStation = -1;
+    }
+    
+    if (oldManualStation != m_manualRunStation)
+    {
+      StopAllStations();
+    }
+  }    
+    
   SaveSettings();
   ProcessSchedule();
   DrawLCD();

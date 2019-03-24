@@ -9,6 +9,7 @@ public:
   
   void Clear();
   void PrintLine(int lineNum, const char* text);
+  void Reset();
   
 private:
   
