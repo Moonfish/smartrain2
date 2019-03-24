@@ -1,2 +1,5 @@
-src/WeatherService.cpp
+src/credentials.h
+.includecache
+.internal
+.o
 .vscode

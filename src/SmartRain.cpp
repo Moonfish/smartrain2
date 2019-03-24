@@ -366,7 +366,7 @@ void SmartRain::ProcessSchedule()
   std::string reason;
 
   // Turn on sprinkler if necessary
-  if (m_manualRunStation == 0 || (currentTime >= sta0_start && currentTime < sta1_start))
+  if (m_manualRunStation == 0 || (m_manualRunStation == -1 && currentTime >= sta0_start && currentTime < sta1_start))
   {
     if (!IsStationOn(0))
     {
@@ -385,7 +385,7 @@ void SmartRain::ProcessSchedule()
       StartStation(0, remainingMin);
     }
   }
-  else if (m_manualRunStation == 1 || (currentTime >= sta1_start && currentTime < sta2_start))
+  else if (m_manualRunStation == 1 || (m_manualRunStation == -1 && currentTime >= sta1_start && currentTime < sta2_start))
   {
     if (!IsStationOn(1))
     {
@@ -404,7 +404,7 @@ void SmartRain::ProcessSchedule()
       StartStation(1, remainingMin);
     }
   }
-  else if (m_manualRunStation == 2 || (currentTime >= sta2_start && currentTime < sta3_start))
+  else if (m_manualRunStation == 2 || (m_manualRunStation == -1 && currentTime >= sta2_start && currentTime < sta3_start))
   {
     if (!IsStationOn(2))
     {
@@ -423,7 +423,7 @@ void SmartRain::ProcessSchedule()
       StartStation(2, remainingMin);
     }
   }
-  else if (m_manualRunStation == 3 || (currentTime >= sta3_start && currentTime < stop))
+  else if (m_manualRunStation == 3 || (m_manualRunStation == -1 && currentTime >= sta3_start && currentTime < stop))
   {
     if (!IsStationOn(3))
     {

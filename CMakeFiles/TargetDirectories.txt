@@ -1,3 +1,0 @@
-/home/russell/code/arm/smartrain2/CMakeFiles/rebuild_cache.dir
-/home/russell/code/arm/smartrain2/CMakeFiles/smartrain.dir
-/home/russell/code/arm/smartrain2/CMakeFiles/edit_cache.dir
