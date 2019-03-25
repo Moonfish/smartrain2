@@ -93,7 +93,7 @@ void Settings::setRunTime(int station, int minutes)
 {
   std::lock_guard<std::mutex> lk(mux);
   if (station >= 0 || station < numStations-1)
-    runTimes[station] = minutes;  
+    runTimes[station] = minutes > 0 ? minutes : 0;  
 }
 
 int Settings::getLastRainDayCount()

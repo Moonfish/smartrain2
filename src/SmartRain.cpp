@@ -381,8 +381,11 @@ void SmartRain::ProcessSchedule()
       }
 
       int remainingMin = std::chrono::duration_cast<std::chrono::minutes>(sta1_start - std::chrono::system_clock::now()).count();
-      std::cout << "Running station 0\n";
-      StartStation(0, remainingMin);
+      if (remainingMin > 0)
+      {
+        std::cout << "Running station 0\n";
+        StartStation(0, remainingMin);
+      }
     }
   }
   else if (m_manualRunStation == 1 || (m_manualRunStation == -1 && currentTime >= sta1_start && currentTime < sta2_start))
@@ -400,8 +403,11 @@ void SmartRain::ProcessSchedule()
       }
 
       int remainingMin = std::chrono::duration_cast<std::chrono::minutes>(sta2_start - std::chrono::system_clock::now()).count();
-      std::cout << "Running station 1\n";
-      StartStation(1, remainingMin);
+      if (remainingMin > 0)
+      {
+        std::cout << "Running station 1\n";
+        StartStation(1, remainingMin);
+      }
     }
   }
   else if (m_manualRunStation == 2 || (m_manualRunStation == -1 && currentTime >= sta2_start && currentTime < sta3_start))
@@ -419,8 +425,11 @@ void SmartRain::ProcessSchedule()
       }
       
       int remainingMin = std::chrono::duration_cast<std::chrono::minutes>(sta3_start - std::chrono::system_clock::now()).count();
-      std::cout << "Running station 2\n";
-      StartStation(2, remainingMin);
+      if (remainingMin > 0)
+      {
+        std::cout << "Running station 2\n";
+        StartStation(2, remainingMin);
+      }
     }
   }
   else if (m_manualRunStation == 3 || (m_manualRunStation == -1 && currentTime >= sta3_start && currentTime < stop))
@@ -438,8 +447,11 @@ void SmartRain::ProcessSchedule()
       }
 
       int remainingMin = std::chrono::duration_cast<std::chrono::minutes>(stop - std::chrono::system_clock::now()).count();
-      std::cout << "Running station 3\n";
-      StartStation(3, remainingMin);
+      if (remainingMin > 0)
+      {
+        std::cout << "Running station 3\n";
+        StartStation(3, remainingMin);
+      }
     }
   }
 }
