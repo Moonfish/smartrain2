@@ -43,7 +43,6 @@
                 </tr>
             </tbody>
     </table>
-    <br>
     <table width="300px" style="text-align: center;font-size:14">
         <tbody>
             <tr>
@@ -51,10 +50,6 @@
                 <td align="center">
                     <input name="startTime" value="[strTime]" pattern="[0-9]{2}:[0-9]{2}" style="width: 110px"></input>
                 </td>
-            </tr>
-            <tr>
-                <td>Disable All</td>
-                <td><input name="disableAll" [disAll] type="checkbox" style="width: 80px"></input></td>
             </tr>
             <tr>
                 <td>Weather</td>
@@ -81,8 +76,7 @@
             </tr>
         </tbody>
     </table>
-    <br>
-    <div Style="font-size: 8pt">
+    <div Style="font-size: 10pt"><br>
         <l1>Manual Override:</l1><br>
         <input type="radio" name="manualOverride" [m-off] value="moff">
         <label for="contactChoice1">Off</label>
@@ -97,7 +91,8 @@
         <label>3</label>
 
         <input type="radio" name="manualOverride" [man-4] value="man4">
-        <label>4</label>
+        <label>4</label><br>
+        <input name="disableAll" [disAll] type="checkbox">Disable All</input>
       </div>
     <input type="submit" id="update" value="Update Settings" style="margin-top: 10px;">
     <input type="button" id="refresh" value="Refresh" onClick="refresh" style="margin-top: 10px;">
