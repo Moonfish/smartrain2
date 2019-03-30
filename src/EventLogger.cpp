@@ -38,6 +38,9 @@ void EventLogger::WriteEvent(const char* entry, bool flushToDisk /* = true */)
   out += fmt;
   out += entry;
 
+  // Echo to cout
+  std::cout << out << "\n";
+
   m_eventList.push_front(out);
 
   // Limit log size to 1000 entries.

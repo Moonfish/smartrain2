@@ -150,8 +150,14 @@ bool SmartRain::IsEnabled()
 
 void SmartRain::StartStation(int station, int forMinutes)
 {
-  if (station < 0 || station >= stationCount)
+  if (station < 0 || station >= stationCount || forMinutes <= 0)
     return;
+
+  // Is already on
+  if (IsStationOn(station))
+    return;
+  
+  std::cout << "Running station " << station <<"\n";
 
   m_runningStation = station;
 
@@ -175,6 +181,9 @@ bool SmartRain::IsStationOn(int station)
 
 void SmartRain::StopAllStations()
 {
+  if (m_runningStation == -1 && m_manualRunStation == -1)
+    return;
+
   m_runningStation = -1;
   m_relay.RelaysOff();
   m_lcd.Reset();
@@ -344,6 +353,12 @@ bool SmartRain::AbortRun(std::string& reason)
 
 void SmartRain::ProcessSchedule()
 {
+  if (m_manualRunStation != -1)
+  {
+      StartStation(m_manualRunStation, 10);
+      return;
+  }
+
   auto currentTime = std::chrono::system_clock::now();
 
   std::chrono::time_point<std::chrono::system_clock> sta0_start;
@@ -365,11 +380,11 @@ void SmartRain::ProcessSchedule()
   static std::string sReason = "";
   std::string reason;
 
+  std::cout << "Processing schedule...\n";
+
   // Turn on sprinkler if necessary
-  if (m_manualRunStation == 0 || (m_manualRunStation == -1 && currentTime >= sta0_start && currentTime < sta1_start))
+  if (currentTime >= sta0_start && currentTime < sta1_start)
   {
-    if (!IsStationOn(0))
-    {
       if (AbortRun(reason))
       {
         if (reason != sReason)
@@ -381,17 +396,10 @@ void SmartRain::ProcessSchedule()
       }
       
       int remainingMin = std::chrono::duration_cast<std::chrono::minutes>(sta1_start - std::chrono::system_clock::now()).count();
-      if (remainingMin <= 0)
-        remainingMin = 10;
-
-      std::cout << "Running station 0\n";
       StartStation(0, remainingMin);
-    }
   }
-  else if (m_manualRunStation == 1 || (m_manualRunStation == -1 && currentTime >= sta1_start && currentTime < sta2_start))
+  else if (currentTime >= sta1_start && currentTime < sta2_start)
   {
-    if (!IsStationOn(1))
-    {
       if (AbortRun(reason))
       {
         if (reason != sReason)
@@ -399,21 +407,15 @@ void SmartRain::ProcessSchedule()
           sReason = reason;
           m_log.WriteEvent(reason);
         }
+
         return;
       }
 
       int remainingMin = std::chrono::duration_cast<std::chrono::minutes>(sta2_start - std::chrono::system_clock::now()).count();
-      if (remainingMin <= 0)
-        remainingMin = 10;
-
-      std::cout << "Running station 1\n";
       StartStation(1, remainingMin);
-    }
   }
-  else if (m_manualRunStation == 2 || (m_manualRunStation == -1 && currentTime >= sta2_start && currentTime < sta3_start))
+  else if (currentTime >= sta2_start && currentTime < sta3_start)
   {
-    if (!IsStationOn(2))
-    {
       if (AbortRun(reason))
       {
         if (reason != sReason)
@@ -421,39 +423,31 @@ void SmartRain::ProcessSchedule()
           sReason = reason;
           m_log.WriteEvent(reason);
         }
+
         return;
       }
       
       int remainingMin = std::chrono::duration_cast<std::chrono::minutes>(sta3_start - std::chrono::system_clock::now()).count();
-      if (remainingMin <= 0)
-        remainingMin = 10;
-
-      std::cout << "Running station 2\n";
       StartStation(2, remainingMin);
-    }
   }
-  else if (m_manualRunStation == 3 || (m_manualRunStation == -1 && currentTime >= sta3_start && currentTime < stop))
+  else if (currentTime >= sta3_start && currentTime < stop)
   {
-    if (!IsStationOn(3))
+    if (AbortRun(reason))
     {
-      if (AbortRun(reason))
+      if (reason != sReason)
       {
-        if (reason != sReason)
-        {
-          sReason = reason;
-          m_log.WriteEvent(reason);
-        }
-        return;
+        sReason = reason;
+        m_log.WriteEvent(reason);
       }
 
-      int remainingMin = std::chrono::duration_cast<std::chrono::minutes>(stop - std::chrono::system_clock::now()).count();
-      if (remainingMin <= 0)
-        remainingMin = 10;
-
-      std::cout << "Running station 3\n";
-      StartStation(3, remainingMin);
+      return;
     }
+
+    int remainingMin = std::chrono::duration_cast<std::chrono::minutes>(stop - std::chrono::system_clock::now()).count();
+    StartStation(3, remainingMin);
   }
+  else
+    StopAllStations();
 }
 
 std::string SmartRain::LoadWebPage()
