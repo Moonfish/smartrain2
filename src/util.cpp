@@ -45,7 +45,7 @@ namespace util
     if (sHourMin.empty())
       return currentTime;
 
-    int pos = sHourMin.find(':');
+    auto pos = sHourMin.find(':');
     if (pos == std::string::npos)
       return currentTime;
     

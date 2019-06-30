@@ -359,6 +359,28 @@ void SmartRain::ProcessSchedule()
       return;
   }
 
+  auto midnight = std::chrono::system_clock::from_time_t(util::TimeFromHourMin("00:00"));
+  auto currentTime = std::chrono::system_clock::now();
+
+  auto startTime1 = midnight + std::chrono::minutes(m_settings.getStartTime());
+  auto totalRunMinutes = m_settings.getRunTime(0) + m_settings.getRunTime(1) + m_settings.getRunTime(2) + m_settings.getRunTime(3);
+  auto endTime1 = startTime1 + std::chrono::minutes(totalRunMinutes);
+   
+  // Start time one always overrides start time if there is any overlap.  Set them equal if only one runtime is desired.
+  if (currentTime >= startTime1 && currentTime <= endTime1)
+  {
+    std::cout << "Checking against first start time...\n";
+    ProcessSchedule(m_settings.getStartTime());
+  }
+  else 
+  {
+    std::cout << "Checking against second start time...\n";
+    ProcessSchedule(m_settings.getStartTime2());
+  }
+}
+
+void SmartRain::ProcessSchedule(int startTime)
+{
   auto currentTime = std::chrono::system_clock::now();
 
   std::chrono::time_point<std::chrono::system_clock> sta0_start;
@@ -370,7 +392,7 @@ void SmartRain::ProcessSchedule()
   {
     std::lock_guard<std::mutex> lk(m_mux);
     auto midnight = std::chrono::system_clock::from_time_t(util::TimeFromHourMin("00:00"));
-    sta0_start = midnight + std::chrono::minutes(m_settings.getStartTime());
+    sta0_start = midnight + std::chrono::minutes(startTime);
     sta1_start = sta0_start + std::chrono::minutes(m_settings.getRunTime(0));
     sta2_start = sta1_start + std::chrono::minutes(m_settings.getRunTime(1));
     sta3_start = sta2_start + std::chrono::minutes(m_settings.getRunTime(2));
@@ -481,6 +503,10 @@ std::string SmartRain::LoadWebPage()
   auto startTime = midnight + std::chrono::minutes(m_settings.getStartTime());
   result.replace(result.find("[strTime]"), 9, util::StrFromTimePoint(startTime, "%H:%M"));
 
+  // Start time 2
+  auto startTime2 = midnight + std::chrono::minutes(m_settings.getStartTime2());
+  result.replace(result.find("[str-Time2]"), 11, util::StrFromTimePoint(startTime2, "%H:%M"));
+
   // Enabled disabled
   result.replace(result.find("[disAll]"), 8, m_settings.getEnabled() ? "" : "checked");
 
@@ -566,6 +592,16 @@ void SmartRain::ProcessForm(const std::string& args)
     auto delta = tp-midnight;
     auto minutes = std::chrono::duration_cast<std::chrono::minutes>(delta).count();
     m_settings.setStartTime((int)minutes);
+  }
+
+  value = util::ParseRequest(args, "startTime2");
+  if (!value.empty())
+  {
+    auto midnight = std::chrono::system_clock::from_time_t(util::TimeFromHourMin("00:00"));
+    auto tp = std::chrono::system_clock::from_time_t(util::TimeFromHourMin(value.c_str()));
+    auto delta = tp-midnight;
+    auto minutes = std::chrono::duration_cast<std::chrono::minutes>(delta).count();
+    m_settings.setStartTime2((int)minutes);
   }
 
   bool enabled = true;

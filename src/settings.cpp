@@ -1,6 +1,6 @@
 #include "settings.h"
 
-constexpr int sCurrentVersion = 1;
+constexpr int sCurrentVersion = 2;
 
 Settings::Settings()
 {
@@ -32,6 +32,7 @@ bool Settings::Load(std::istream& strm)
   this->lastRain = std::chrono::system_clock::from_time_t(tp);
   
   strm >> this->startTime;
+  strm >> this->startTime2;
   
   for(auto& dur : this->runTimes)
     strm >> dur;
@@ -50,6 +51,7 @@ bool Settings::Save(std::ostream& strm)
   strm << this->enabled << "\n";
   strm << std::chrono::system_clock::to_time_t(this->lastRain) << "\n";
   strm << this->startTime << "\n";
+  strm << this->startTime2 << "\n";
   for(auto& dur : this->runTimes)
     strm << dur << "\n";
 
@@ -74,10 +76,22 @@ int Settings::getStartTime()
   return startTime;
 }
 
+int Settings::getStartTime2()
+{
+  std::lock_guard<std::mutex> lk(mux);
+  return startTime2;
+}
+
 void Settings::setStartTime(int minutes)
 {
   std::lock_guard<std::mutex> lk(mux);
   startTime = minutes;
+}
+
+void Settings::setStartTime2(int minutes)
+{
+  std::lock_guard<std::mutex> lk(mux);
+  startTime2 = minutes;
 }
 
 int Settings::getRunTime(int station)

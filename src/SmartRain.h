@@ -100,6 +100,7 @@ private:
   bool SaveSettings();
   void DrawLCD();
   void ProcessSchedule();
+  void ProcessSchedule(int startTime);
   void UpdateWeatherInfo();
   bool AbortRun(std::string& reason);
 
